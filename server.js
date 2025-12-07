@@ -17,7 +17,7 @@ import connectDB from "./config/db.js";
 
 const app = express(); //instance d'express
 
-const allowedOrigin = "https://senecolevirtuelle.vercel.app/";
+const allowedOrigin = "https://senecolevirtuelle.vercel.app";
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigin);
