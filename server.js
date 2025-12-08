@@ -21,7 +21,7 @@ app.use(cors({
 }));
 
 // 🔥 Obligatoire pour Railway/Vercel (préflight OPTIONS)
-app.options("*", cors());
+app.options("/api/*", cors());
 
 // Middlewares
 app.use(express.json());
