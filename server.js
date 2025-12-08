@@ -1,4 +1,53 @@
-import "dotenv/config";   // Bibliotéque de node.js. Permet de charger les variables d'environnement
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import profRoutes from "./routes/profRoutes.js";
+import eleveRoutes from "./routes/eleveRoutes.js";
+import classRoutes from "./routes/classroutes.js";
+import coursRoutes from "./routes/coursRoutes.js";
+import path from "path";
+import demandeRoutes from "./routes/demandeRoutes.js";
+import connectDB from "./config/db.js";
+
+const app = express();
+
+// 🔥 CORS — doit être placé en tout premier
+app.use(cors({
+  origin: "https://senecolevirtuelle.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+
+// 🔥 Obligatoire pour Railway/Vercel (préflight OPTIONS)
+app.options("*", cors());
+
+// Middlewares
+app.use(express.json());
+app.use(morgan("dev"));
+
+const __dirname = path.resolve();
+
+// Connexion DB
+connectDB();
+
+// Routes
+app.use("/api/eleves", eleveRoutes);
+app.use("/api/profs", profRoutes);
+app.use("/api/classes", classRoutes);
+app.use("/api/cours", coursRoutes);
+app.use("/api/demandes", demandeRoutes);
+
+// Accès aux uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
+
+/*import "dotenv/config";   // Bibliotéque de node.js. Permet de charger les variables d'environnement
 import express from "express"; // framework de node.js. Sert uniquement á gérer les routes http comm app.get, app.post ...
 import cors from "cors";  // Middleware permet d'activer le CROSS-ORIGIN RESOURCE SHARING
 import morgan from "morgan";//Middlewae du protocole http. permet de loguer dans le cosole toutes les requètes http
@@ -47,7 +96,7 @@ app.use((req, res, next) => {
   next();
 });
 
-*/
+
 const __dirname = path.resolve();
 
 
@@ -74,4 +123,4 @@ app.use("/api/demandes", demandeRoutes);
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));*/
