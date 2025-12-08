@@ -13,15 +13,16 @@ import connectDB from "./config/db.js";
 const app = express();
 
 // 🔥 CORS — doit être placé en tout premier
-app.use(cors({
+app.use(cors());
+/*app.use(cors({
   origin: "https://senecolevirtuelle.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
-}));
+}));*/
 
 // 🔥 Obligatoire pour Railway/Vercel (préflight OPTIONS)
-app.options("/api/*", cors());
+//app.options("/api/*", cors());
 
 // Middlewares
 app.use(express.json());
