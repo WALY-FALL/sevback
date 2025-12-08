@@ -2,11 +2,15 @@ import express from "express";
 import multer from "multer";
 import { ajouterCours, getCoursParProfesseur, getCoursParClasse } from "../controller/coursController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
+//import { creerCours } from "../controllers/coursController.js";
 
 const router = express.Router();
 
 // Configuration Multer pour les fichiers
-const storage = multer.diskStorage({
+/*const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/"); // dossier où les fichiers seront stockés
   },
@@ -15,7 +19,27 @@ const storage = multer.diskStorage({
   },
 });
 
+const upload = multer({ storage });*/
+// Configuration Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Storage Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "cours",
+    resource_type: "auto",
+  },
+});
+
 const upload = multer({ storage });
+
+// Route upload cours
+router.post("/", upload.single("fichiers"), ajouterCours);
 
 // Routes
 

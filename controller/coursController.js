@@ -4,6 +4,8 @@ import Prof from "../models/profmodel.js";
 // Ajouter un cours
 export const ajouterCours = async (req, res) => {
 
+
+/*
   //console.log("📤 Création cours:", { titre, description, contenu, profId, classeId, fichiers });
   console.log("📦 BODY REÇU :", req.body);
 console.log("📁 FILES :", req.files);
@@ -31,6 +33,29 @@ console.log("📁 FILES :", req.files);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erreur lors de l'ajout du cours", error: error.message });
+  }
+
+  */
+
+  try {
+    const { titre, description, contenu, classeId, profId } = req.body;
+
+    const fichiers = req.files?.map(f => f.path); // URL Cloudinary !!!
+
+    const cours = await Cours.create({
+      titre,
+      description,
+      contenu,
+      classeId,
+      profId,
+      fichiers,
+    });
+
+    res.status(201).json(cours);
+
+  } catch (err) {
+    console.error("Erreur Cloudinary :", err);
+    res.status(500).json({ message: "Erreur serveur lors de la création du cours" });
   }
 };
 
