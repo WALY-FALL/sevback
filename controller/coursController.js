@@ -44,28 +44,6 @@ export const getCoursParProfesseur = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-/*export const getCoursParProfesseur = async (req, res) => {
-  try {
-    const { profId } = req.params;
-    const cours = await Cours.find({ profId }).populate("classeId", "nom"); // On peut peupler le nom de la classe
-    res.status(200).json(cours);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de la récupération des cours du professeur", error: error.message });
-  }
-};*/
-
-// Récupérer tous les cours d'une classe
-/*export const getCoursParClasse = async (req, res) => {
-  try {
-    const { classeId } = req.params;
-    const cours = await Cours.find({ classeId }).populate("profId", "nom prenom"); // On peut peupler le nom du prof
-    res.status(200).json(cours);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de la récupération des cours de la classe", error: error.message });
-  }
-};*/
 
 export const getCoursParClasse = async (req, res) => {
   try {
