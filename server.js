@@ -4,7 +4,6 @@ import cors from "cors";  // Middleware permet d'activer le CROSS-ORIGIN RESOURC
 import morgan from "morgan";//Middlewae du protocole http. permet de loguer dans le cosole toutes les requètes http
 import profRoutes from "./routes/profRoutes.js"; //Objet routeur express, crèer avec express.Router().
 import eleveRoutes from "./routes/eleveRoutes.js";
-//import loginProfRoutes from "./routes/loginprofroutes.js";
 import classRoutes from "./routes/classroutes.js";
 import coursRoutes from "./routes/coursRoutes.js";
 import path from "path";
@@ -17,7 +16,16 @@ import connectDB from "./config/db.js";
 
 const app = express(); //instance d'express
 
-const allowedOrigin = "https://senecolevirtuelle.vercel.app";
+// Middlewares
+app.use(express.json()); // permet à notre app de pouvoir lire les fichiers JSON des requétes du client
+//app.use(cors());
+app.use(cors({
+  origin: "https://senecolevirtuelle.vercel.app",
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+}));
+app.use(morgan("dev"));
+
+/*const allowedOrigin = "https://senecolevirtuelle.vercel.app";
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigin);
@@ -39,7 +47,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
+*/
 const __dirname = path.resolve();
 
 
@@ -48,41 +56,21 @@ const __dirname = path.resolve();
 // Connexion à la base de données
 connectDB();
 
-// Middlewares
-app.use(express.json()); // permet à notre app de pouvoir lire les fichiers JSON des requétes du client
-//app.use(cors());
-app.use(cors({
-  origin: "https://senecolevirtuelle.vercel.app",
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-}));
-app.use(morgan("dev"));
+
 
 //Les routes
-//app.use("/api/prof", signupProfRoutes); // pour toutes les requetes qui commencent par /api/signup utiliser signupRoutes. Permet à app d'utiliser lobjet router d'express avec la route /api/signup
+
 app.use("/api/eleves", eleveRoutes);
 app.use("/api/profs", profRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/cours", coursRoutes);
 
 // ⚡ Permet d'accéder aux fichiers uploadés
-//app.use("/uploads", express.static("uploads"));
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 app.use("/api/demandes", demandeRoutes);
-
-//app.use("/api/eleves", eleveRoutes);
-
-
-
-// Tester les routes
-/*app.get("/", (req, res) => {
-  res.send("🚀 API running with ESM!");
-});*/
-
-
-
-
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 5000;
