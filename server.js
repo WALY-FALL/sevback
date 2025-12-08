@@ -1,4 +1,29 @@
-import "dotenv/config";
+import express from "express";
+import cors from "cors";
+
+const app = express();
+
+// CORS — permet toutes les origines pour tester
+app.use(cors());
+app.use(express.json());
+
+// Endpoint test
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" });
+});
+
+// Endpoint signup test
+app.post("/api/profs/signup", (req, res) => {
+  console.log("Body reçu :", req.body); // log pour vérifier que la requête arrive
+  res.json({ status: "ok", message: "Signup endpoint reached" });
+});
+
+// Port Railway
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
+
+/*import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -24,6 +49,7 @@ app.use(cors());
 // 🔥 Obligatoire pour Railway/Vercel (préflight OPTIONS)
 //app.options("/api/*", cors());
 
+/*
 // Middlewares
 app.use(express.json());
 app.use(morgan("dev"));
@@ -46,6 +72,21 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*import "dotenv/config";   // Bibliotéque de node.js. Permet de charger les variables d'environnement
