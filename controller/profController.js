@@ -69,7 +69,7 @@ export const login = async (req, res) => {
       // Vérifier le mot de passe
       const isMatch = await bcrypt.compare(password, prof.password);
       if (!isMatch) {
-        return res.status(402).json({ success: false, message: "Invalid credentials" });
+        return res.status(401).json({ success: false, message: "Invalid credentials" });
       }
   
       // Créer un token JWT
