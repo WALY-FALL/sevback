@@ -3,7 +3,7 @@ import multer from "multer";
 import { ajouterCours, getCoursParProfesseur, getCoursParClasse } from "../controller/coursController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "../config/cloudinary.js";
+//import cloudinary from "../config/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
 //import { creerCours } from "../controllers/coursController.js";
 
