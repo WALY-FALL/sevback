@@ -3,8 +3,8 @@ import multer from "multer";
 import { ajouterCours, getCoursParProfesseur, getCoursParClasse } from "../controller/coursController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-//import cloudinary from "../config/cloudinary.js";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../config/cloudinary.js";
+//import { v2 as cloudinary } from "cloudinary";
 //import { creerCours } from "../controllers/coursController.js";
 
 const router = express.Router();
@@ -20,12 +20,6 @@ const router = express.Router();
 });
 
 const upload = multer({ storage });*/
-// Configuration Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 // Storage Cloudinary
 const storage = new CloudinaryStorage({

@@ -11,6 +11,8 @@ import path from "path";
 import multer from "multer";
 import demandeRoutes from "./routes/demandeRoutes.js";
 import connectDB from "./config/db.js";
+import "./config/cloudinary.js";
+
 
 const app = express();
 
