@@ -33,7 +33,9 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 // Route upload cours
-router.post("/", upload.single("fichiers"), ajouterCours);
+//router.post("/", upload.single("fichiers"), ajouterCours);
+router.post("/", upload.array("fichiers", 5), ajouterCours);
+
 
 // Routes
 

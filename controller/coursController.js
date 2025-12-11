@@ -46,8 +46,8 @@ console.log("📁 FILES :", req.files);
       nom: f.originalname // nom du fichier
     }));
     
-    console.log("req.files:", req.files);
-    console.log("req.body:", req.body);
+    console.log(req.files);
+
     const cours = await Cours.create({
       titre,
       description,
