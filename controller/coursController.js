@@ -42,12 +42,13 @@ console.log("📁 FILES :", req.files);
 
     //const fichiers = req.files?.map(f => f.path); // URL Cloudinary !!!
     const fichiers = req.files?.map(f => ({
-      url: f.path,        // l’URL Cloudinary
+      //url: f.path,        // l’URL Cloudinary
+      url: f.secure_url || f.path, // priorite à secure_url
       nom: f.originalname // nom du fichier
     }));
     
     console.log(req.files);
-
+    console.log("📁 FILE UPLOADED:", req.files);
     const cours = await Cours.create({
       titre,
       description,
