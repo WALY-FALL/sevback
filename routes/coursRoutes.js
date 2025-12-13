@@ -4,6 +4,7 @@ import { ajouterCours, getCoursParProfesseur, getCoursParClasse, supprimerCours 
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
+import { protect } from "../middlewares/authMiddleware.js";
 //import { v2 as cloudinary } from "cloudinary";
 //import { creerCours } from "../controllers/coursController.js";
 
