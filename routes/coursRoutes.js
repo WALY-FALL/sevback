@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { ajouterCours, getCoursParProfesseur, getCoursParClasse } from "../controller/coursController.js";
+import { ajouterCours, getCoursParProfesseur, getCoursParClasse, supprimerCours } from "../controller/coursController.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
@@ -9,17 +9,7 @@ import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
 
-// Configuration Multer pour les fichiers
-/*const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // dossier où les fichiers seront stockés
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
 
-const upload = multer({ storage });*/
 
 // Storage Cloudinary
 const storage = new CloudinaryStorage({
@@ -33,7 +23,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 // Route upload cours
-//router.post("/", upload.single("fichiers"), ajouterCours);
+
 router.post("/", upload.array("fichiers", 5), ajouterCours);
 
 
@@ -42,8 +32,6 @@ router.post("/", upload.array("fichiers", 5), ajouterCours);
 // Ajouter un cours avec fichiers
 // Ajouter un cours (sécurisé)
 router.post("/", verifyToken, upload.array("fichiers", 10), ajouterCours);
-//router.post("/", upload.array("fichiers", 10), ajouterCours); 
-// "fichiers" = nom du champ dans le frontend, 10 = max 10 fichiers à la fois
 
 // Récupérer tous les cours d'un professeur
 router.get("/prof", verifyToken ,getCoursParProfesseur);
@@ -54,5 +42,8 @@ router.get("/classe/:classeId", verifyToken, getCoursParClasse);
 router.get("/test", (req, res) => {
   res.send("Route cours OK");
 });
+
+// Supprimer un cours (sécurisé)
+router.delete("/:id", protect, supprimerCours);
 
 export default router;

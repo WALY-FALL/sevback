@@ -5,38 +5,6 @@ import Prof from "../models/profmodel.js";
 export const ajouterCours = async (req, res) => {
 
 
-/*
-  //console.log("📤 Création cours:", { titre, description, contenu, profId, classeId, fichiers });
-  console.log("📦 BODY REÇU :", req.body);
-console.log("📁 FILES :", req.files);
-
-
-
-  try {
-
-    //console.log("BODY:", req.body);
-    //console.log("FILES:", req.files);
-    const { titre, description, contenu, profId, classeId } = req.body;
-    const fichiers = req.files ? req.files.map(file => ({ nom: file.originalname, url: file.path })) : [];
-
-    const nouveauCours = new Cours({
-      titre,
-      description,
-      contenu,
-      profId,
-      classeId,
-      fichiers,
-    });
-
-    await nouveauCours.save();
-    res.status(201).json({ message: "Cours ajouté avec succès", cours: nouveauCours });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erreur lors de l'ajout du cours", error: error.message });
-  }
-
-  */
-
   try {
     const { titre, description, contenu, classeId, profId } = req.body;
 
@@ -112,3 +80,27 @@ export const getCoursParClasse = async (req, res) => {
   }
 };
 
+export const supprimerCours = async (req, res) => {
+  try {
+    const coursId = req.params.id;
+    const profId = req.prof.id; // depuis le token
+
+    const cours = await Cours.findById(coursId);
+
+    if (!cours) {
+      return res.status(404).json({ message: "Cours introuvable" });
+    }
+
+    // 🔐 Sécurité : seul le prof propriétaire peut supprimer
+    if (cours.profId.toString() !== profId) {
+      return res.status(403).json({ message: "Action non autorisée" });
+    }
+
+    await cours.deleteOne();
+
+    res.status(200).json({ message: "Cours supprimé avec succès", coursId });
+  } catch (err) {
+    console.error("❌ Suppression cours :", err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
