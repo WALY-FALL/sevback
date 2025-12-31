@@ -2,7 +2,7 @@ import Eleve from "../models/elevemodel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import DemandeAcces from "../models/DemandeAccesmodel.js";
-import Classe from "../models/classemodel.js";
+import Classe from "../models/classmodel.js";
 
 // Générer un token JWT
 const generateToken = (eleveId) => {
