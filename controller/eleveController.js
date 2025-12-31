@@ -2,6 +2,7 @@ import Eleve from "../models/elevemodel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import DemandeAcces from "../models/DemandeAccesmodel.js";
+import Classe from "../models/classemodel.js";
 
 // Générer un token JWT
 const generateToken = (eleveId) => {
@@ -147,7 +148,71 @@ export const getElevesByProf = async (req, res) => {
   }
 };
 
+
+// ➕ Demande d'accès à une classe par un élève
 export const demanderAccesClasse = async (req, res) => {
+  try {
+    const { eleveId, profId, classeId } = req.body;
+
+    console.log("📥 Données reçues:", { eleveId, profId, classeId });
+
+    // 1️⃣ Vérification des champs obligatoires
+    if (!eleveId || !profId || !classeId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Champs manquants." 
+      });
+    }
+
+    // 2️⃣ Vérifier si l'élève a déjà une demande pour CE PROF (en attente ou acceptée)
+    const dejaDemande = await DemandeAcces.findOne({
+      eleveId,
+      profId,
+      statut: { $in: ["en_attente", "accepte"] },
+    });
+
+    if (dejaDemande) {
+      return res.status(400).json({
+        success: false,
+        message: "Vous avez déjà choisi une classe pour ce professeur",
+      });
+    }
+
+    // 3️⃣ Vérifier que la classe existe
+    const classe = await Classe.findById(classeId);
+    if (!classe) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Classe introuvable" 
+      });
+    }
+
+    // 4️⃣ Créer la demande
+    const demande = await DemandeAcces.create({
+      eleveId,
+      profId,
+      classeId,
+      statut: "en_attente",
+      dateDemande: new Date(),
+    });
+
+    res.status(201).json({ 
+      success: true, 
+      message: "Demande envoyée au professeur.", 
+      demande 
+    });
+
+  } catch (error) {
+    console.error("❌ Erreur lors de la création de la demande :", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Erreur serveur." 
+    });
+  }
+};
+
+
+/*export const demanderAccesClasse = async (req, res) => {
   try {
     const { eleveId, profId, classeId } = req.body;
 
@@ -178,33 +243,7 @@ export const demanderAccesClasse = async (req, res) => {
     console.error("Erreur lors de la création de la demande :", error);
     res.status(500).json({ success: false, message: "Erreur serveur." });
   }
-};
-
-/*export const demanderAccesClasse = async (req, res) => {
-  try {
-    console.log("📥 Données reçues:", req.body); 
-    const { eleveId, profId, classeId } = req.body;
-
-    // Vérifie si une demande existe déjà
-    const existe = await DemandeAcces.findOne({ eleveId, classeId });
-    if (existe) {
-      return res.status(400).json({ success: false, message: "Demande déjà envoyée." });
-    }
-
-    const demande = await DemandeAcces.create({
-      eleveId,
-      profId,
-      classeId,
-      statut: "en_attente", // 👈 AJOUT ICI
-    });
-
-    res.status(201).json({ success: true, message: "Demande envoyée au professeur.", demande });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Erreur lors de la création de la demande." });
-  }
 };*/
-
 
 export const verifierAccesEleve = async (req, res) => {
   try {
