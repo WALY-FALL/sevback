@@ -266,4 +266,29 @@ export const verifierAccesEleve = async (req, res) => {
   }
 };
 
+// 📋 Récupérer toutes les classes accessibles pour un élève
+export const getClassesEleve = async (req, res) => {
+  try {
+    const eleveId = req.params.eleveId; // ou req.user.id si tu utilises JWT
+
+    // Cherche toutes les demandes ACCEPTÉES pour cet élève
+    const demandesAcceptees = await DemandeAcces.find({
+      eleveId,
+      statut: "accepte",
+    }).populate("classeId");
+
+    // Retourne uniquement les classes accessibles
+    const classes = demandesAcceptees.map(d => d.classeId);
+
+    res.status(200).json({
+      success: true,
+      classes,
+    });
+
+  } catch (error) {
+    console.error("Erreur getClassesEleve:", error);
+    res.status(500).json({ success: false, message: "Erreur serveur" });
+  }
+};
+
 

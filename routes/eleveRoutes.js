@@ -4,6 +4,7 @@ import {
   loginEleve,
   addEleve,
   getElevesByProf,
+  getClassesEleve,
 } from "../controller/eleveController.js";
 
 import Eleve from "../models/elevemodel.js";
@@ -19,6 +20,9 @@ router.post("/login", loginEleve);
 
 // 🔹 Récupérer les élèves d’un prof
 router.get("/profs/:profId", getElevesByProf);
+
+// Route pour récupérer les classes accessibles pour un élève
+router.get("/classes/:eleveId", getClassesEleve);
 
 // 🔹 Lier un élève à un prof et une classe (⚙️ version finale)
 router.put("/choisir", async (req, res) => {
