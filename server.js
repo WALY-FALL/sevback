@@ -19,7 +19,7 @@ const app = express();
 // 🔥 CORS — doit être placé en tout premier
 //app.use(cors());
 app.use(cors({
-  origin: "https://senecolevirtuelle.vercel.app",
+  origin: "https://senecolevirtuelle.com",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
